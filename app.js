@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import authRoutes from './routes/auth.js';        // ✅ Asegúrate de que estos están bien
-import productRoutes from './routes/products.js'; // ✅ con los controladores que corresponden
+import authRoutes from './routes/auth.js';    
+import productRoutes from './routes/products.js'; 
 import userRoutes from './routes/users.js';
 
 const app = express();

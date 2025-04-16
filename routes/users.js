@@ -4,7 +4,6 @@ import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Get user purchases
 router.get('/purchases', authenticateToken, async (req, res) => {
   try {
     const result = await query(`
@@ -24,7 +23,6 @@ router.get('/purchases', authenticateToken, async (req, res) => {
   }
 });
 
-// Create purchase
 router.post('/purchase', authenticateToken, async (req, res) => {
   const client = await getClient();
   try {
@@ -51,7 +49,6 @@ router.post('/purchase', authenticateToken, async (req, res) => {
   }
 });
 
-// Get user sales
 router.get('/sales', authenticateToken, async (req, res) => {
   try {
     const result = await query(`
@@ -73,12 +70,10 @@ router.get('/sales', authenticateToken, async (req, res) => {
   }
 });
 
-// Toggle favorite
 router.post('/favorites/:productId', authenticateToken, async (req, res) => {
   try {
     const { productId } = req.params;
     
-    // Check if favorite exists
     const existing = await query(
       'SELECT * FROM favorites WHERE user_id = $1 AND product_id = $2',
       [req.user.id, productId]
@@ -102,7 +97,6 @@ router.post('/favorites/:productId', authenticateToken, async (req, res) => {
   }
 });
 
-// Get user favorites
 router.get('/favorites', authenticateToken, async (req, res) => {
   try {
     const result = await query(`
