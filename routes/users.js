@@ -27,14 +27,14 @@ router.post('/purchase', authenticateToken, async (req, res) => {
   const client = await getClient();
   try {
     await client.query('BEGIN');
-    
+
     const { items } = req.body;
     const purchases = [];
 
     for (const item of items) {
       const result = await client.query(
-        'INSERT INTO purchases (user_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *',
-        [req.user.id, item.id, item.quantity || 1]
+        'INSERT INTO purchases (user_id, product_id, quantity, size) VALUES ($1, $2, $3, $4) RETURNING *',
+        [req.user.id, item.id, item.quantity || 1, item.selectedSize || '']
       );
       purchases.push(result.rows[0]);
     }
