@@ -1,5 +1,4 @@
 import pool from "../config/db.js";
-import { query, getClient } from '../config/db.js';
 
 export async function toggleFavorite(req, res) {
   const userId = req.user.id;
@@ -63,4 +62,28 @@ export async function getPurchases(req, res) {
     [userId]
   );
   res.json(result.rows);
+}
+
+export async function getUserSales(req, res) {
+  const userId = req.user.id;
+  try {
+    const result = await pool.query(
+      `SELECT 
+        p.*, 
+        pu.quantity, 
+        pu.size, 
+        pu.created_at, 
+        u.name AS buyer_name 
+      FROM purchases pu
+      JOIN products p ON p.id = pu.product_id
+      JOIN users u ON u.id = pu.user_id
+      WHERE p.user_id = $1
+      ORDER BY pu.created_at DESC`,
+      [userId]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error("❌ Error en getUserSales:", error);
+    res.status(500).json({ error: error.message });
+  }
 }
